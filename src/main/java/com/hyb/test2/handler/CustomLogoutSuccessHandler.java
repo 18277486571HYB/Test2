@@ -1,4 +1,4 @@
-package com.hyb.test2.config;
+package com.hyb.test2.handler;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler;

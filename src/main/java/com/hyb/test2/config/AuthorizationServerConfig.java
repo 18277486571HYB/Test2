@@ -20,67 +20,67 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 import java.util.concurrent.TimeUnit;
 
-@Configuration
-@EnableAuthorizationServer
-public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
-
-    @Autowired
-    AuthenticationManager authenticationManager;
-
-    @Autowired
-    SheepUserDetailsService sheepUserDetailsService;
-
-    @Override
-    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-
-        // 定义了两个客户端应用的通行证
-        clients.inMemory()
-                .withClient("admin")
-                .secret(new BCryptPasswordEncoder().encode("123456"))
-                .authorizedGrantTypes("authorization_code", "refresh_token","password")
-                .scopes("all")
-                .autoApprove(true)
-                .redirectUris("http://192.168.216.1:8001/login","http://192.168.216.1:8004/login");
-
-    }
-
-    @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-
-        endpoints.tokenStore(jwtTokenStore()).accessTokenConverter(jwtAccessTokenConverter());
-        DefaultTokenServices tokenServices = (DefaultTokenServices) endpoints.getDefaultAuthorizationServerTokenServices();
-        tokenServices.setTokenStore(endpoints.getTokenStore());
-        tokenServices.setSupportRefreshToken(true);
-        tokenServices.setClientDetailsService(endpoints.getClientDetailsService());
-        tokenServices.setTokenEnhancer(endpoints.getTokenEnhancer());
-        tokenServices.setAccessTokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(1)); // 一天有效期
-        endpoints.tokenServices(tokenServices);
-
-        //密码模式配置
-        endpoints.authenticationManager(authenticationManager).userDetailsService(sheepUserDetailsService);
-    }
-
-    @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        security
-                .tokenKeyAccess("isAuthenticated()")
-                .checkTokenAccess("permitAll()")
-                .allowFormAuthenticationForClients();
-    }
-
-    @Bean
-    public TokenStore jwtTokenStore() {
-        return new JwtTokenStore(jwtAccessTokenConverter());
-    }
-
-    @Bean
-    public JwtAccessTokenConverter jwtAccessTokenConverter(){
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setSigningKey("testKey");
-        //不设置这个会出现 Cannot convert access token to JSON
-//        converter.setVerifierKey("testKey");
-//        converter.setVerifier(new RsaVerifier("testKey"));
-        return converter;
-    }
-
-}
+//@Configuration
+//@EnableAuthorizationServer
+//public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
+//
+//    @Autowired
+//    AuthenticationManager authenticationManager;
+//
+//    @Autowired
+//    SheepUserDetailsService sheepUserDetailsService;
+//
+//    @Override
+//    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+//
+//        // 定义了两个客户端应用的通行证
+//        clients.inMemory()
+//                .withClient("admin")
+//                .secret(new BCryptPasswordEncoder().encode("123456"))
+//                .authorizedGrantTypes("authorization_code", "refresh_token","password")
+//                .scopes("all")
+//                .autoApprove(true)
+//                .redirectUris("http://192.168.216.1:8001/login","http://192.168.216.1:8004/login");
+//
+//    }
+//
+//    @Override
+//    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+//
+//        endpoints.tokenStore(jwtTokenStore()).accessTokenConverter(jwtAccessTokenConverter());
+//        DefaultTokenServices tokenServices = (DefaultTokenServices) endpoints.getDefaultAuthorizationServerTokenServices();
+//        tokenServices.setTokenStore(endpoints.getTokenStore());
+//        tokenServices.setSupportRefreshToken(true);
+//        tokenServices.setClientDetailsService(endpoints.getClientDetailsService());
+//        tokenServices.setTokenEnhancer(endpoints.getTokenEnhancer());
+//        tokenServices.setAccessTokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(1)); // 一天有效期
+//        endpoints.tokenServices(tokenServices);
+//
+//        //密码模式配置
+//        endpoints.authenticationManager(authenticationManager).userDetailsService(sheepUserDetailsService);
+//    }
+//
+//    @Override
+//    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+//        security
+//                .tokenKeyAccess("isAuthenticated()")
+//                .checkTokenAccess("permitAll()")
+//                .allowFormAuthenticationForClients();
+//    }
+//
+//    @Bean
+//    public TokenStore jwtTokenStore() {
+//        return new JwtTokenStore(jwtAccessTokenConverter());
+//    }
+//
+//    @Bean
+//    public JwtAccessTokenConverter jwtAccessTokenConverter(){
+//        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+//        converter.setSigningKey("testKey");
+//        //不设置这个会出现 Cannot convert access token to JSON
+////        converter.setVerifierKey("testKey");
+////        converter.setVerifier(new RsaVerifier("testKey"));
+//        return converter;
+//    }
+//
+//}
